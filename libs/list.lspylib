@@ -1,0 +1,83 @@
+; 空类型
+(def {nil} {})
+
+; 布尔类型
+(def {true} 1)
+(def {false} 0)
+
+; 函数定义 Lambda 表达式
+(def {fun} (\ {f b} {
+  def (head f) (\ (tail f) b)
+}))
+
+; 取列表中的第一、二、三项
+(fun {fst l} { eval (head l) })
+(fun {snd l} { eval (head (tail l)) })
+(fun {trd l} { eval (head (tail (tail l))) })
+
+; 获取列表长度
+(fun {len l} {
+  if (== l nil)
+    {0}
+    {+ 1 (len (tail l))}
+})
+
+; 取列表中的第 n 项
+(fun {nth n l} {
+  if (== n 0)
+    {fst l}
+    {nth (- n 1) (tail l)}
+})
+
+; 取列表中的最后一项
+(fun {last l} {nth (- (len l) 1) l})
+
+; 取列表中的前 n 项
+(fun {take n l} {
+  if (== n 0)
+    {nil}
+    {join (head l) (take (- n 1) (tail l))}
+})
+
+; 删除列表中的前 n 项
+(fun {drop n l} {
+  if (== n 0)
+    {l}
+    {drop (- n 1) (tail l)}
+})
+
+; 从第 n 项分裂列表
+(fun {split n l} {list (take n l) (drop n l)})
+
+; 取元素的 idx
+(fun {elem x l} {
+  if (== l nil)
+    {false}
+    {if (== x (fst l)) {true} {elem x (tail l)}}
+})
+
+; Map 函数：所有列表元素执行相同的操作
+(fun {map f l} {
+  if (== l nil)
+    {nil}
+    {join (list (f (fst l))) (map f (tail l))}
+})
+
+; Filter 函数：根据过滤条件进行元素过滤
+(fun {filter f l} {
+  if (== l nil)
+    {nil}
+    {join (if (f (fst l)) {head l} {nil}) (filter f (tail l))}
+})
+
+; Fold Left 函数：向左折叠逐一执行指定函数操作
+(fun {foldl f z l} {
+  if (== l nil)
+    {z}
+    {foldl f (f z (fst l)) (tail l)}
+})
+
+; 向左折叠求和
+(fun {sum l} {foldl + 0 l})
+; 向左折叠求积
+(fun {product l} {foldl * 1 l})

@@ -1,12 +1,14 @@
 # lispy
 
-A lisp-like programming language.
+A lisp-like programming language and some libraries.
 
 # Use Guide
 
 ```bash
 $ yum install readline-devel -y
 
+$ git clone https://github.com/JmilkFan/lispy.git
+$ cd lispy
 $ gcc -g -std=c99 -Wall lispy.c mpc.c lvalues.c lenv.c lbuiltins.c -lreadline -lm -o lispy
 
 $ ./lispy

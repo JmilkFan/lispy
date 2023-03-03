@@ -1,0 +1,64 @@
+; 空类型
+(def {nil} {})
+
+; 布尔类型
+(def {true} 1)
+(def {false} 0)
+
+; 函数定义 Lambda 表达式
+(def {fun} (\ {f b} {
+  def (head f) (\ (tail f) b)
+}))
+
+; 取列表中的第一、二、三项
+(fun {fst l} { eval (head l) })
+(fun {snd l} { eval (head (tail l)) })
+(fun {trd l} { eval (head (tail (tail l))) })
+
+; Unpack List for Function
+(fun {unpack f l} {
+  eval (join (list f) l)
+})
+; Pack List for Function
+(fun {pack f & xs} {f xs})
+
+
+; switch 关键字
+(fun {switch & cs} {
+  if (== cs nil)
+    {error "No Selection Found"}
+    {if (fst (fst cs)) {snd (fst cs)} {unpack switch (tail cs)}}
+})
+
+; default 关键字
+(def {default} true)
+
+; case 关键字
+(fun {case x & cs} {
+  if (== cs nil)
+    {error "No Case Found"}
+    {if (== x (fst (fst cs))) {snd (fst cs)} {
+      unpack case (join (list x) (tail cs))}}
+})
+
+
+; 条件选择月份后缀函数
+(fun {month-day-suffix i} {
+  switch
+    {(== i 0)  "st"}
+    {(== i 1)  "nd"}
+    {(== i 3)  "rd"}
+    {default   "th"}
+})
+
+; 条件选择星期几函数
+(fun {day-name x} {
+  case x
+    {0 "Monday"}
+    {1 "Tuesday"}
+    {2 "Wednesday"}
+    {3 "Thursday"}
+    {4 "Friday"}
+    {5 "Saturday"}
+    {6 "Sunday"}
+})
